@@ -18,11 +18,9 @@ public class User {
 
     @Email(message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
-    
     @NotEmpty(message = "логин не может быть пустым")
     @Pattern(regexp = "^\\S+$", message = "логин не может содержать пробелы")
     private String login;
-    
     private String name;
 
     @NotNull(message = "дата рождения не может быть пустым")
