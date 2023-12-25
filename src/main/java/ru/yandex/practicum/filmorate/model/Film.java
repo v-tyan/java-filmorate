@@ -3,32 +3,34 @@ package ru.yandex.practicum.filmorate.model;
 import java.util.Date;
 
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Builder;
 import lombok.Data;
+import ru.yandex.practicum.filmorate.model.constraints.FilmReleaseDateConstraint;
 
 /**
  * Film.
  */
 @Data
+@Builder
 public class Film {
     private Integer id;
 
-    @NotEmpty(message = "название не может быть пустым")
+    @NotEmpty(groups = {Update.class}, message = "название не может быть пустым")
     private String name;
 
-    @Size(max = 200, message = "максимальная длина описания — 200 символов")
+    @Size(groups = {Update.class}, max = 200, message = "максимальная длина описания — 200 символов")
     private String description;
 
-    @Past
+    @FilmReleaseDateConstraint(groups = {Update.class})
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date releaseDate;
 
     // Duration in minutes
-    @Positive
+    @Positive(groups = {Update.class}, message = "продолжительность фильма должна быть положительной")
     private int duration;
 }

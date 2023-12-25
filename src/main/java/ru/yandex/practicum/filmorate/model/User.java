@@ -10,21 +10,24 @@ import javax.validation.constraints.Pattern;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
+@Builder
 public class User {
     private Integer id;
 
-    @Email(message = "электронная почта не может быть пустой и должна содержать символ @")
+    @Email(groups = {Update.class}, message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
-    @NotEmpty(message = "логин не может быть пустым")
-    @Pattern(regexp = "^\\S+$", message = "логин не может содержать пробелы")
+
+    @Pattern(groups = {Update.class}, regexp = "^\\S+$", message = "логин не может быть пустым и содержать пробелы")
     private String login;
+
     private String name;
 
-    @NotNull(message = "дата рождения не может быть пустым")
-    @Past(message = "дата рождения не может быть в будущем")
+    @NotNull(groups = {Update.class}, message = "дата рождения не может быть пустой")
+    @Past(groups = {Update.class}, message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 }
