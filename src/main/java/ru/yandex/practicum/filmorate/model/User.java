@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import java.util.Date;
 
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
@@ -18,16 +17,16 @@ import lombok.Data;
 public class User {
     private Integer id;
 
-    @Email(groups = {Update.class}, message = "электронная почта не может быть пустой и должна содержать символ @")
+    @Email(groups = { Update.class }, message = "электронная почта не может быть пустой и должна содержать символ @")
     private String email;
 
-    @Pattern(groups = {Update.class}, regexp = "^\\S+$", message = "логин не может быть пустым и содержать пробелы")
+    @Pattern(groups = { Update.class }, regexp = "^\\S+$", message = "логин не может быть пустым и содержать пробелы")
     private String login;
 
     private String name;
 
-    @NotNull(groups = {Update.class}, message = "дата рождения не может быть пустой")
-    @Past(groups = {Update.class}, message = "дата рождения не может быть в будущем")
+    @NotNull(groups = { Update.class }, message = "дата рождения не может быть пустой")
+    @Past(groups = { Update.class }, message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
 }

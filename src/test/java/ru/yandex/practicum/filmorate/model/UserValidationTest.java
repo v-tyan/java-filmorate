@@ -42,7 +42,8 @@ public class UserValidationTest {
         Set<ConstraintViolation<User>> violations = validator.validate(invalidUser, Update.class);
         assertTrue(!violations.isEmpty());
         assertTrue(violations.size() == 1);
-        assertTrue(violations.iterator().next().getMessage().equals("электронная почта не может быть пустой и должна содержать символ @"));
+        assertTrue(violations.iterator().next().getMessage()
+                .equals("электронная почта не может быть пустой и должна содержать символ @"));
     }
 
     @Test
