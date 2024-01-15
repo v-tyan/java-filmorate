@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -29,4 +30,6 @@ public class User {
     @Past(groups = { Update.class }, message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date birthday;
+
+    private Set<Integer> friends;
 }
