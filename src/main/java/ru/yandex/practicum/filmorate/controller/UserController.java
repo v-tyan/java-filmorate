@@ -19,8 +19,6 @@ import ru.yandex.practicum.filmorate.model.Update;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.service.user.UserService;
 import ru.yandex.practicum.filmorate.storage.user.UserStorage;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequestMapping("/users")
@@ -69,5 +67,5 @@ public class UserController {
     public User getUser(@PathVariable int id) {
         return inMemoryUserStorage.getUser(id);
     }
-    
+
 }
