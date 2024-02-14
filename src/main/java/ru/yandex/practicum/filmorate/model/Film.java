@@ -1,6 +1,7 @@
 package ru.yandex.practicum.filmorate.model;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
@@ -33,4 +34,10 @@ public class Film {
     // Duration in minutes
     @Positive(groups = { Update.class }, message = "продолжительность фильма должна быть положительной")
     private int duration;
+
+    private Set<Integer> userLikes;
+
+    private Set<Genre> genres;
+
+    private AgeRating ageRating;
 }

@@ -1,11 +1,12 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,55 +14,58 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.filmorate.model.Update;
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.model.exceptions.UserNotFoundException;
+import ru.yandex.practicum.filmorate.service.user.UserService;
+import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 
 @RestController
 @RequestMapping("/users")
-@Slf4j
+@RequiredArgsConstructor
 public class UserController {
-    private int nextId = 1;
-
-    private HashMap<Integer, User> users = new HashMap<>();
+    private final UserStorage inMemoryUserStorage;
+    private final UserService userService;
 
     @GetMapping
     public List<User> getUsers() {
-        return List.copyOf(users.values());
+        return inMemoryUserStorage.getUsers();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Validated(Update.class) @RequestBody User user) {
-        if (user.getName() == null || user.getName().isBlank()) {
-            user.setName(user.getLogin());
-        }
-
-        user.setId(getNextId());
-        users.put(user.getId(), user);
-        log.info("Создан пользователь {}", user);
-
-        return user;
+        return inMemoryUserStorage.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@Validated(Update.class) @RequestBody User user) {
-        if (user.getId() != null && users.containsKey(user.getId())) {
-            if (user.getName() == null || user.getName().isBlank()) {
-                user.setName(user.getLogin());
-            }
-
-            users.put(user.getId(), user);
-            log.info("Обновлен пользователь {}", user);
-
-            return user;
-        } else {
-            throw new UserNotFoundException("User not found");
-        }
+        return inMemoryUserStorage.updatUser(user);
     }
 
-    private int getNextId() {
-        return nextId++;
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.addFriend(id, friendId);
     }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User deleteFriend(@PathVariable int id, @PathVariable int friendId) {
+        return userService.deleteFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public List<User> getMethodName(@PathVariable int id) {
+        return userService.getFriends(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public List<User> getMethodName(@PathVariable int id, @PathVariable int otherId) {
+        return userService.getCommonFriends(id, otherId);
+    }
+
+    @GetMapping("/{id}")
+    public User getUser(@PathVariable int id) {
+        return inMemoryUserStorage.getUser(id);
+    }
+
 }
