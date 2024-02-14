@@ -36,4 +36,8 @@ public class Film {
     private int duration;
 
     private Set<Integer> userLikes;
+
+    private Set<Genre> genres;
+
+    private AgeRating ageRating;
 }
