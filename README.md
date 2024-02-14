@@ -2,4 +2,4 @@
 Repository for Filmorate project.
 
 # ER diagram
-(/filmorate_ER-diagram.png)
+!(/filmorate_ER-diagram.png)
