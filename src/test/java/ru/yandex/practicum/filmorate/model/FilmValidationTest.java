@@ -3,7 +3,6 @@ package ru.yandex.practicum.filmorate.model;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
