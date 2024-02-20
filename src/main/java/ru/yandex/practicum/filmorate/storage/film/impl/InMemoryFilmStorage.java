@@ -1,7 +1,6 @@
 package ru.yandex.practicum.filmorate.storage.film.impl;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Component;
@@ -25,7 +24,7 @@ public class InMemoryFilmStorage implements FilmStorage {
     @Override
     public Film createFilm(Film film) {
         if (film.getUserLikes() == null) {
-            film.setUserLikes(new HashSet<Integer>());
+            film.setUserLikes(0);
         }
         film.setId(getNextId());
         films.put(film.getId(), film);
@@ -58,5 +57,11 @@ public class InMemoryFilmStorage implements FilmStorage {
         } else {
             throw new FilmNotFoundException("film not found");
         }
+    }
+
+    @Override
+    public List<Film> getPopular(int count) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getPopular'");
     }
 }

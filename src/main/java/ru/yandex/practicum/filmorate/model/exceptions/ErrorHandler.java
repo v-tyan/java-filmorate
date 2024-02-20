@@ -25,6 +25,19 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleGenreNotFound(final GenreNotFoundException e) {
+        log.warn("Ошибка GenreNotFoundException - {}", e.getMessage());
+        return new ErrorResponse("GenreNotFound", e.getMessage());
+    }
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleMpaNotFound(final MpaNotFoundException e) {
+        log.warn("Ошибка MpaNotFoundException - {}", e.getMessage());
+        return new ErrorResponse("MpaNotFound", e.getMessage());
+    }
+
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleThrowable(final Throwable e) {
         log.error("Ошибка InternalServerError - {}", e.getMessage());

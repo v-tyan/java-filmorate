@@ -1,9 +1,11 @@
 package ru.yandex.practicum.filmorate.model;
 
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class AgeRating {
+@Builder
+public class MPA {
     private final int id;
-    private final String rating;
+    private final String name;
 }

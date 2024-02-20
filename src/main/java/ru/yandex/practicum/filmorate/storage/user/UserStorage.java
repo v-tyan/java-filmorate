@@ -12,4 +12,6 @@ public interface UserStorage {
     public User createUser(User user);
 
     public User updatUser(User user);
+
+    public void deleteUser(Integer id);
 }

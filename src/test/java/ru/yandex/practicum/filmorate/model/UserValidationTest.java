@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Set;
 
@@ -24,7 +25,7 @@ public class UserValidationTest {
                 .email("foo@bar.com")
                 .login("John")
                 .name("Doe")
-                .birthday(new Date())
+                .birthday(LocalDate.of(1999, 02, 05))
                 .build();
         Set<ConstraintViolation<User>> violations = validator.validate(validUser, Update.class);
         assertTrue(violations.isEmpty());
@@ -37,7 +38,7 @@ public class UserValidationTest {
                 .email("foo.bar.com")
                 .login("John")
                 .name("Doe")
-                .birthday(new Date())
+                .birthday(LocalDate.of(1999, 02, 05))
                 .build();
         Set<ConstraintViolation<User>> violations = validator.validate(invalidUser, Update.class);
         assertTrue(!violations.isEmpty());
@@ -53,7 +54,7 @@ public class UserValidationTest {
                 .email("foo@bar.com")
                 .login("John Doe")
                 .name("")
-                .birthday(new Date())
+                .birthday(LocalDate.of(1999, 02, 05))
                 .build();
         Set<ConstraintViolation<User>> violations = validator.validate(invalidUser, Update.class);
         assertTrue(!violations.isEmpty());
@@ -65,7 +66,7 @@ public class UserValidationTest {
                 .email("foo@bar.com")
                 .login("")
                 .name("")
-                .birthday(new Date())
+                .birthday(LocalDate.of(1999, 02, 05))
                 .build();
         violations = validator.validate(invalidUser, Update.class);
         assertTrue(!violations.isEmpty());
@@ -80,7 +81,7 @@ public class UserValidationTest {
                 .email("foo@bar.com")
                 .login("John")
                 .name("Doe")
-                .birthday(new Date(Long.MAX_VALUE))
+                .birthday(LocalDate.of(2099, 02, 05))
                 .build();
         Set<ConstraintViolation<User>> violations = validator.validate(invalidUser, Update.class);
         assertTrue(!violations.isEmpty());

@@ -1,6 +1,8 @@
 package ru.yandex.practicum.filmorate.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 
 import javax.validation.constraints.Email;
@@ -29,7 +31,16 @@ public class User {
     @NotNull(groups = { Update.class }, message = "дата рождения не может быть пустой")
     @Past(groups = { Update.class }, message = "дата рождения не может быть в будущем")
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date birthday;
+    private LocalDate birthday;
 
     private Set<Integer> friends;
+
+    public Map<String, Object> toMap() {
+        Map<String, Object> values = new HashMap<>();
+        values.put("email", email);
+        values.put("login", login);
+        values.put("name", name);
+        values.put("birthday", birthday);
+        return values;
+    }
 }

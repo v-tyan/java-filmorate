@@ -24,23 +24,23 @@ import ru.yandex.practicum.filmorate.storage.user.UserStorage;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserStorage inMemoryUserStorage;
+    private final UserStorage userStorage;
     private final UserService userService;
 
     @GetMapping
     public List<User> getUsers() {
-        return inMemoryUserStorage.getUsers();
+        return userStorage.getUsers();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@Validated(Update.class) @RequestBody User user) {
-        return inMemoryUserStorage.createUser(user);
+        return userStorage.createUser(user);
     }
 
     @PutMapping
     public User updateUser(@Validated(Update.class) @RequestBody User user) {
-        return inMemoryUserStorage.updatUser(user);
+        return userStorage.updatUser(user);
     }
 
     @PutMapping("/{id}/friends/{friendId}")
@@ -65,7 +65,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     public User getUser(@PathVariable int id) {
-        return inMemoryUserStorage.getUser(id);
+        return userStorage.getUser(id);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Integer id) {
+        userStorage.deleteUser(id);
     }
 
 }
