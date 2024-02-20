@@ -30,6 +30,7 @@ public class ErrorHandler {
         log.warn("Ошибка GenreNotFoundException - {}", e.getMessage());
         return new ErrorResponse("GenreNotFound", e.getMessage());
     }
+
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleMpaNotFound(final MpaNotFoundException e) {
