@@ -67,4 +67,9 @@ public class InMemoryUserStorage implements UserStorage {
             throw new UserNotFoundException("User not found");
         }
     }
+
+    @Override
+    public void deleteUser(Integer id) {
+        throw new UnsupportedOperationException("Unimplemented method 'deleteUser'");
+    }
 }

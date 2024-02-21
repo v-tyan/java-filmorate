@@ -12,4 +12,6 @@ public interface FilmStorage {
     public Film createFilm(Film film);
 
     public Film updatefilm(Film film);
+
+    public List<Film> getPopular(int count);
 }

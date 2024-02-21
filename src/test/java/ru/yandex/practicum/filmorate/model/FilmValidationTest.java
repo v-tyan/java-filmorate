@@ -2,7 +2,7 @@ package ru.yandex.practicum.filmorate.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Set;
 
 import javax.validation.ConstraintViolation;
@@ -23,7 +23,7 @@ public class FilmValidationTest {
                 .id(0)
                 .name("validFilm")
                 .description("description")
-                .releaseDate(new Date())
+                .releaseDate(LocalDate.now())
                 .duration(130)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(validFilm, Update.class);
@@ -36,7 +36,7 @@ public class FilmValidationTest {
                 .id(0)
                 .name("")
                 .description("description")
-                .releaseDate(new Date())
+                .releaseDate(LocalDate.now())
                 .duration(130)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(invalidFilm, Update.class);
@@ -51,7 +51,7 @@ public class FilmValidationTest {
                 .id(0)
                 .name("valid")
                 .description("description".repeat(100))
-                .releaseDate(new Date())
+                .releaseDate(LocalDate.now())
                 .duration(130)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(invalidFilm, Update.class);
@@ -66,7 +66,7 @@ public class FilmValidationTest {
                 .id(0)
                 .name("valid")
                 .description("description")
-                .releaseDate(new Date(-2335564900000L))
+                .releaseDate(LocalDate.of(1895, 12, 27))
                 .duration(130)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(invalidFilm, Update.class);
@@ -81,7 +81,7 @@ public class FilmValidationTest {
                 .id(0)
                 .name("valid")
                 .description("description")
-                .releaseDate(new Date())
+                .releaseDate(LocalDate.now())
                 .duration(-130)
                 .build();
         Set<ConstraintViolation<Film>> violations = validator.validate(invalidFilm, Update.class);

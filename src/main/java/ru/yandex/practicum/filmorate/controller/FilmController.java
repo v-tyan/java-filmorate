@@ -19,29 +19,27 @@ import lombok.RequiredArgsConstructor;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.Update;
 import ru.yandex.practicum.filmorate.service.film.FilmService;
-import ru.yandex.practicum.filmorate.storage.film.FilmStorage;
 
 @RestController
 @RequestMapping("/films")
 @RequiredArgsConstructor
 public class FilmController {
-    private final FilmStorage inMemoryFilmStorage;
     private final FilmService filmService;
 
     @GetMapping
     public List<Film> getFilms() {
-        return inMemoryFilmStorage.getFilms();
+        return filmService.getFilms();
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Film createFilm(@Validated(Update.class) @RequestBody Film film) {
-        return inMemoryFilmStorage.createFilm(film);
+        return filmService.createFilm(film);
     }
 
     @PutMapping
     public Film updatefilm(@Validated(Update.class) @RequestBody Film film) {
-        return inMemoryFilmStorage.updatefilm(film);
+        return filmService.updatefilm(film);
     }
 
     @PutMapping("/{id}/like/{userId}")
@@ -61,6 +59,6 @@ public class FilmController {
 
     @GetMapping("/{id}")
     public Film getFilm(@PathVariable int id) {
-        return inMemoryFilmStorage.getFilm(id);
+        return filmService.getFilm(id);
     }
 }
