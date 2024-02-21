@@ -2,6 +2,7 @@ package ru.yandex.practicum.filmorate.service.film;
 
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -49,32 +50,28 @@ public class FilmService {
 
     public Film createFilm(Film film) {
         Film interimFilm = filmStorage.createFilm(film);
-        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
-            for (Genre genre : film.getGenres()) {
-                genresStorage.addFilmGenre(film.getId(), genre.getId());
-            }
-        }
+        genresStorage.addFilmGenres(interimFilm.getId(), film.getGenres());
         interimFilm.setGenres(film.getGenres());
         return interimFilm;
     }
 
     public List<Film> getFilms() {
         List<Film> films = filmStorage.getFilms();
+        Map<Integer, LinkedHashSet<Genre>> allFilmsGenres = genresStorage.getAllFilmsGenres();
+        System.out.println(allFilmsGenres);
         for (Film film : films) {
-            film.setGenres(new LinkedHashSet<Genre>(genresStorage.getFilmGenres(film.getId())));
+            if (!allFilmsGenres.containsKey(film.getId())) {
+                film.setGenres(new LinkedHashSet<Genre>());
+            } else {
+                film.setGenres(allFilmsGenres.get(film.getId()));
+            }
         }
         return films;
     }
 
     public Film updatefilm(Film film) {
-        if (film.getGenres() != null && !film.getGenres().isEmpty()) {
-            genresStorage.deleteFilmGenres(film.getId());
-            for (Genre genre : film.getGenres()) {
-                genresStorage.addFilmGenre(film.getId(), genre.getId());
-            }
-        } else {
-            genresStorage.deleteFilmGenres(film.getId());
-        }
+        genresStorage.deleteFilmGenres(film.getId());
+        genresStorage.addFilmGenres(film.getId(), film.getGenres());
         filmStorage.updatefilm(film);
         return film;
     }

@@ -1,9 +1,13 @@
 package ru.yandex.practicum.filmorate.storage.genres.impl;
 
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.dao.DataAccessException;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -38,12 +42,14 @@ public class GenresDbStorage implements GenresStorage {
     }
 
     @Override
-    public void addFilmGenre(Integer filmId, Integer genreId) {
-        String sqlString = "MERGE INTO film_genre (film_id, genre_id) VALUES (?, ?)";
-        try {
-            jdbcTemplate.update(sqlString, filmId, genreId);
-        } catch (DataAccessException e) {
-            throw new GenreNotFoundException("Genre not found");
+    public void addFilmGenres(Integer filmId, Set<Genre> genres) {
+        if (genres != null && !genres.isEmpty()) {
+            String sqlString = "MERGE INTO film_genre (film_id, genre_id) VALUES (?, ?)";
+            jdbcTemplate.batchUpdate(sqlString, genres, genres.size(),
+                    (ps, genre) -> {
+                        ps.setInt(1, filmId);
+                        ps.setInt(2, genre.getId());
+                    });
         }
     }
 
@@ -58,5 +64,24 @@ public class GenresDbStorage implements GenresStorage {
     public void deleteFilmGenres(Integer filmId) {
         String sqlString = "DELETE FROM film_genre WHERE film_id = ?";
         jdbcTemplate.update(sqlString, filmId);
+    }
+
+    @Override
+    public Map<Integer, LinkedHashSet<Genre>> getAllFilmsGenres() {
+        String sqlString = "SELECT f.film_id, g.genre_id, g.name " +
+                "FROM film_genre f " +
+                "LEFT JOIN genres g ON f.genre_id = g.genre_ID " +
+                "ORDER BY f.film_id";
+        Map<Integer, LinkedHashSet<Genre>> results = new HashMap<>();
+        jdbcTemplate.query(sqlString, (ResultSet rs) -> {
+            if (!results.containsKey(rs.getInt("film_id"))) {
+                results.put(rs.getInt("film_id"), new LinkedHashSet<Genre>());
+            }
+            results.get(rs.getInt("film_id")).add(Genre.builder()
+                    .id(rs.getInt("genre_id"))
+                    .name(rs.getString("name"))
+                    .build());
+        });
+        return results;
     }
 }
